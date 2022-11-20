@@ -44,11 +44,11 @@ async def get_curso(curso_id: int = Path(default=None, title="id do curso", desc
 async def post_curso(curso: Curso, db: Any = Depends(fake_db)):
 
     next_id: int = len(cursos) + 1
-    cursos[next_id] = curso
-    del curso.id
+    curso.id = next_id
+    cursos.append(curso)
     return curso
 
-@app.put("/cursos/{curso_id}")
+@app.put("/cursos/{curso_id}", include_in_schema=False)
 async def put_curso(curso_id: int, curso: Curso, db: Any = Depends(fake_db)):
 
     if curso_id in cursos:
